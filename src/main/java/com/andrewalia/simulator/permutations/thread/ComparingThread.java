@@ -1,11 +1,11 @@
-package com.andrewalia.simulater.permutations.thread;
+package com.andrewalia.simulator.permutations.thread;
 
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.javatuples.Triplet;
 
-import com.andrewalia.simulater.permutations.util.ShowdownResultsMap;
+import com.andrewalia.simulator.permutations.util.ShowdownResultsMap;
 import com.andrewalia.util.Card;
 import com.andrewalia.util.Deck;
 import com.andrewalia.util.HoleCards;

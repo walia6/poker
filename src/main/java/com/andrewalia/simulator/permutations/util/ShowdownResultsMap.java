@@ -1,4 +1,4 @@
-package com.andrewalia.simulater.permutations.util;
+package com.andrewalia.simulator.permutations.util;
 
 import java.util.HashMap;
 import java.util.stream.Stream;

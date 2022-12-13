@@ -1,4 +1,4 @@
-package com.andrewalia.simulater.permutations;
+package com.andrewalia.simulator.permutations;
 
 import java.util.Iterator;
 import java.util.Timer;
@@ -7,8 +7,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.commons.math3.util.Combinations;
 
-import com.andrewalia.simulater.permutations.thread.ComparingThread;
-import com.andrewalia.simulater.permutations.util.ShowdownResultsMap;
+import com.andrewalia.simulator.permutations.thread.ComparingThread;
+import com.andrewalia.simulator.permutations.util.ShowdownResultsMap;
 import com.andrewalia.util.Deck;
 
 
