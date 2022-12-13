@@ -35,7 +35,7 @@ public final class Main {
             } else if (args[i].equals("-i")) {
                 iterations = Integer.parseInt(args[i + 1]);
             } else if (args[i].equals("-p")) {
-                com.andrewalia.simulater.permutations.Main.main(availableProcessors);
+                com.andrewalia.simulator.permutations.Main.main(availableProcessors);
                 return;
             }
         }
