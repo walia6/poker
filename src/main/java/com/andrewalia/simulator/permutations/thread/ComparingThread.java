@@ -1,6 +1,6 @@
 package com.andrewalia.simulator.permutations.thread;
 
-import java.util.Iterator;
+import java.util.Queue;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.javatuples.Triplet;
@@ -14,30 +14,35 @@ import com.andrewalia.util.NCardHand;
 public class ComparingThread implements Runnable {
 
     private static final int REPORTING_INTERVAL = 1000000;
-    private final Iterator<int[]> iterator;
     private final ShowdownResultsMap localShowdownResultsMap;
     private final AtomicLong permutations;
     private final ShowdownResultsMap globalShowdownResultsMap;
+    private final Queue<int[]> queue;
     private long reports;
 
-    public ComparingThread(Iterator<int[]> iterator, AtomicLong permutations, ShowdownResultsMap globalShowdownResultsMap) {
-        this.iterator = iterator;
+
+    public ComparingThread(Queue<int[]> queue, AtomicLong permutations, ShowdownResultsMap globalShowdownResultsMap) {
         this.permutations = permutations;
         this.localShowdownResultsMap = new ShowdownResultsMap();
         this.reports = 0;
         this.globalShowdownResultsMap = globalShowdownResultsMap;
+        this.queue = queue;
     }
 
     @Override
     public void run() {
         int[] cardIndexes;
         while (true) {
-            synchronized(iterator) {
-                if (!iterator.hasNext()) {
-                    report();
-                    break;
+            synchronized(queue) {
+                while (queue.isEmpty()) {
+                    try {
+                        queue.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
-                cardIndexes = iterator.next();
+                cardIndexes = queue.poll();
+                queue.notify();
             }
 
             compareAndUpdateLocalShowdownResultsMap(cardIndexes);
@@ -49,8 +54,14 @@ public class ComparingThread implements Runnable {
     }
 
     private void compareAndUpdateLocalShowdownResultsMap(int[] cardIndexes) {
-
-        final HoleCards holeCards = HoleCards.valueOf(Deck.FULL_DECK.get(cardIndexes[0]), Deck.FULL_DECK.get(cardIndexes[1]));
+        HoleCards holeCards;
+        try {
+            holeCards = HoleCards.valueOf(Deck.FULL_DECK.get(cardIndexes[0]), Deck.FULL_DECK.get(cardIndexes[1]));
+        } catch (NullPointerException e) {
+            System.out.println("cardIndexes[0] = " + cardIndexes[0]);
+            System.out.println("cardIndexes[1] = " + cardIndexes[1]);
+            throw e;
+        }
 
         if (!localShowdownResultsMap.containsKey(holeCards)) {
             localShowdownResultsMap.put(holeCards, new Triplet<Long[],Long[],Long[]>(new Long[] {0L}, new Long[] {0L}, new Long[] {0L}));

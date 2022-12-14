@@ -31,6 +31,7 @@ public class ShowdownResultsMap extends HashMap<HoleCards,Triplet<Long[],Long[],
         try{
             sb.deleteCharAt(sb.length() - 1);
         } catch (StringIndexOutOfBoundsException e) {
+            e.printStackTrace();
         }
 
         return sb.toString();
